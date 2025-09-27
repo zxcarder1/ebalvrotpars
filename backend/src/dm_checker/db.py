@@ -3,8 +3,14 @@
 from __future__ import annotations
 
 from contextlib import asynccontextmanager
+from typing import AsyncIterator
 
-from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, async_sessionmaker, create_async_engine
+from sqlmodel.ext.asyncio.session import (
+    AsyncEngine,
+    AsyncSession,
+    async_sessionmaker,
+    create_async_engine,
+)
 
 from .config import AppSettings
 
@@ -31,7 +37,7 @@ def get_session_factory(settings: AppSettings) -> async_sessionmaker[AsyncSessio
 
 
 @asynccontextmanager
-async def session_scope(settings: AppSettings):
+async def session_scope(settings: AppSettings) -> AsyncIterator[AsyncSession]:
     """Provide a transactional scope around async operations."""
 
     factory = get_session_factory(settings)
